@@ -101,9 +101,11 @@ def bla():
 
 def plot_for_weights(weights):
     nodes = []
-    for i, row in enumerate(weights[1:]): # XXX
+    for i, row in enumerate(weights):
         for j, col in enumerate(row):
-            nodes.append((row * 10, col * 10))
+            nodes.append((i, j))
+    for i in range(10):
+        nodes.append((3, i))
 
     node_trace = go.Scatter(
             x=[node[0] for node in nodes],
