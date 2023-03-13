@@ -2,7 +2,6 @@ import json
 from urllib.parse import urljoin
 
 import config
-import networkx as nx
 import plotly.graph_objects as go
 import requests
 import streamlit as st
@@ -100,14 +99,27 @@ def bla():
     fig.show()
 
 
+def plot_for_weights(weights):
+    nodes = []
+    for i, row in enumerate(weights[1:]): # XXX
+        for j, col in enumerate(row):
+            nodes.append((row * 10, col * 10))
+
+    node_trace = go.Scatter(
+            x=[node[0] for node in nodes],
+            y=[node[1] for node in nodes],
+            mode="markers",
+    )
+
+    fig = go.Figure(node_trace)
+    fig.show()
+    return fig
+
+
 def fetch_and_display(base_uri):
     response = requests.get(urljoin(base_uri, "weights"))
     weights = json.loads(response.text)
-    for i, row in enumerate(weights):
-        st.header(i)
-        st.text("len" + str(len(row)) + ":")
-        st.text(row)
-
+    st.pyplot(plot_for_weights(weights))
 
 st.set_page_config(layout="wide")
 
